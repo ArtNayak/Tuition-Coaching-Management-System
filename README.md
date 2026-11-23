@@ -8,13 +8,13 @@ A command-line system in Python for running a tuition/coaching centre, with four
 - **Lecturer** – manage the student list, enrol students into classes, change enrolments, approve or reject coaching requests, remove enrolments by TP number.
 - **Student** – request a module, track or delete pending requests, view their schedule, view the invoice and pay.
 
-Everyone can create an account with a profile and update it later (including changing their password).
+Anyone can self-register, but only as a **Student**. The first run asks you to create the first Administrator, and administrators create Trainer, Lecturer and further Administrator accounts from their menu. Everyone can update their profile later (including their password).
 
 ## Run
 ```
 python tuition_system.py
 ```
-`za.json` is created on first run next to the script and is not committed (it holds user data). Create an Administrator, a Trainer, a Lecturer and a Student account from the main menu to try the full flow.
+`za.json` is created on first run next to the script and is not committed (it holds user data). On first run you create the administrator, then log in and add a Trainer and a Lecturer from the admin menu, and register a Student from the main menu.
 
 A student's enrolment is matched by username, so when a lecturer enrols a student, use the student's account username.
 

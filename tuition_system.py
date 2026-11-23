@@ -115,7 +115,8 @@ def show_module(m, with_trainer=False):
 
 
 # ---------- accounts ----------
-def create_account():
+def create_account(roles=("Student",)):
+    """Self-registration only offers Student; staff roles are created by an administrator."""
     data = load()
     username = ask("\nUsername: ")
     if not username:
@@ -125,9 +126,12 @@ def create_account():
     password = ask("Password: ")
     if not password:
         return print("Password cannot be empty.")
-    for i, role in enumerate(ROLES, 1):
-        print(f"{i}. {role}")
-    role = ROLES[ask_int("Role: ", range(1, len(ROLES) + 1)) - 1]
+    if len(roles) == 1:
+        role = roles[0]
+    else:
+        for i, r in enumerate(roles, 1):
+            print(f"{i}. {r}")
+        role = roles[ask_int("Role: ", range(1, len(roles) + 1)) - 1]
 
     print("\nCreate your profile:")
     profile = {"Username": username, "role": role, "address": ask("Address: ")}
@@ -245,6 +249,7 @@ def administrator(user):
         ("Create a module and assign a trainer", create_module),
         ("View monthly income", view_monthly_income),
         ("View feedback sent by trainers", read_feedback),
+        ("Create a staff account (administrator, trainer, lecturer)", lambda: create_account(ROLES)),
         ("Update profile", lambda: update_profile(user)),
         ("Logout", None)])
 
@@ -534,6 +539,9 @@ ROLE_MENUS = {"administrator": administrator, "trainer": trainer, "lecturer": le
 def main():
     migrate()
     try:
+        if not any(u["role"] == "Administrator" for u in load()["users"]):
+            print("No administrator exists yet. Create the first administrator account.")
+            create_account(("Administrator",))
         while True:
             print("\n1. Login\n2. Create account\n3. Quit")
             choice = ask_int("Choose: ", (1, 2, 3))
